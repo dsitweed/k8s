@@ -58,3 +58,5 @@ mongo-password=mongopassword
 ```bash
 echo -n mongopassword | base64
 ```
+- Cải tiến sử dụng statefulSet thay vì deployment co mongodb
+- Sử dụng ingress thay cho service với mongodb
