@@ -1,0 +1,35 @@
+```bash
+minikube start --memory 4096 --cpus 2
+minikube addons enable ingress. 
+# Ingress là một tài nguyên giúp quản lý truy cập HTTP/HTTPS từ bên ngoài vào các dịch vụ bên trong cluster.
+# Minikube sẽ cài đặt và chạy NGINX Ingress Controller trong namespace kube-system.
+# Kiểm tra xem ingress Controller đã được bật chưa
+kubectl get pods -n kube-system
+# Tạo namespace
+kubectl create namespace blog-system
+kubectl config set-context --current --namespace=blog-system
+kubectl apply -f secret.yaml
+kubectl apply -f configmap.yaml
+
+# Xem thông tin trong file config có như mong muốn không
+kubectl get svc mysql-service -n blog-system -o yaml
+kubectl logs mysql-0 -n blog-system
+kubectl describe pod wordpress-646c68545-qjw6x
+
+# Xoá và cập nhật lại
+kubectl delete svc mysql-service -n blog-system
+kubectl apply -f mysql-statefulset.yaml
+
+
+kubectl delete pod -l app=mysql -n blog-system
+kubectl delete statefulset mysql -n blog-system
+kubectl delete pvc -l app=mysql -n blog-system
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.1/deploy/static/provider/cloud/deploy.yaml
+kubectl get svc -n wordpress-system
+kubectl get nodes -o wide
+echo "$(kubectl get ingress wordpress-ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}') blog.local" | sudo tee -a /etc/hosts
+
+
+kubectl logs <nginx-ingress-pod> -n ingress-nginx
+```
